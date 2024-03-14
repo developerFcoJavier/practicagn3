@@ -1,0 +1,84 @@
+<h1 id="tableLabel">Empleados</h1>
+
+<p *ngIf="!forecasts?.length"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="forecasts.length">
+  <thead>
+    <tr>
+      <th>Clave de empleado</th>
+      <th>Nombre</th>
+      <th>Fecha Ingreso</th>
+      <th>Fecha de Nacimiento</th>
+      <th>Departamento</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let forecast of forecasts">
+      <td>{{ forecast.claveEmpleado }}</td>
+      <td>{{ forecast.nombre }}</td>
+      <td>{{ forecast.fechaNacimiento }}</td>
+      <td>{{ forecast.fechaNacimiento }}</td>
+      <td>{{ forecast.departamentoID }}</td>
+    </tr>
+  </tbody>
+</table>
+<button class="btn btn-primary" (click)="openModal()">Agregar</button>
+
+<div class="modal-container" [class.active]="modalOpen">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="register-form">
+      <h4>Insertar elemento</h4>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Clave de Empleado</label>
+          <input type="number"
+                 formControlName="claveEmpleado"
+                 class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.claveEmpleado.errors }" />
+          <div *ngIf="submitted && f.claveEmpleado.errors" class="invalid-feedback">
+            <div *ngIf="f.claveEmpleado.errors.required">Campo requerido</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nombre de Empleado</label>
+          <input type="text"
+                 formControlName="nombre"
+                 class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }" />
+          <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+            <div *ngIf="f.nombre.errors.required">Campo requerido</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Fecha de Nacimiento</label>
+          <input type="date"
+                 formControlName="fechaNacimiento"
+                 class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.fechaNacimiento.errors }" />
+          <div *ngIf="submitted && f.fechaNacimiento.errors" class="invalid-feedback">
+            <div *ngIf="f.fechaNacimiento.errors.required">Campo requerido</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Clave de Departamento</label>
+          <input type="number"
+                 formControlName="departamentoID"
+                 class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.departamentoID.errors }" />
+          <div *ngIf="submitted && f.departamentoID.errors" class="invalid-feedback">
+            <div *ngIf="f.departamentoID.errors.required">Campo requerido</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="button"
+                  (click)="onReset()"
+                  class="btn btn-warning float-right">
+            Reset
+          </button>
+          <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

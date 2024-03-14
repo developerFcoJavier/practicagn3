@@ -1,0 +1,60 @@
+<h1 id="tableLabel">Departamentos</h1>
+
+<p *ngIf="!forecasts?.length"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="forecasts.length">
+  <thead>
+    <tr>
+      <th>Clave de departamento</th>
+      <th>Descripción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let forecast of forecasts">
+      <td>{{ forecast.claveDepartamento }}</td>
+      <td>{{ forecast.descripcion }}</td>
+    </tr>
+  </tbody>
+</table>
+<button class="btn btn-primary" (click)="openModal()">Agregar</button>
+
+<div class="modal-container" [class.active]="modalOpen">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="register-form">
+      <h4>Insertar elemento</h4>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Clave de departamento</label>
+          <input type="text"
+                 formControlName="claveDepartamento"
+                 class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.claveDepartamento.errors }" />
+          <div *ngIf="submitted && f.claveDepartamento.errors" class="invalid-feedback">
+            <div *ngIf="f.claveDepartamento.errors.required">Campo requerido</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripcion</label>
+          <input type="text"
+                 formControlName="descripcion"
+                 class="form-control"
+                 [ngClass]="{ 'is-invalid': submitted && f.descripcion.errors }" />
+          <div *ngIf="submitted && f.descripcion.errors" class="invalid-feedback">
+            <div *ngIf="f.descripcion.errors.required">Campo requerido</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="button"
+                  (click)="onReset()"
+                  class="btn btn-warning float-right">
+            Reset
+          </button>
+          <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+

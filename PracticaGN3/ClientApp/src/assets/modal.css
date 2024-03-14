@@ -1,0 +1,34 @@
+.modal-container {
+  display: none; /* Por defecto, ocultamos el modal */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro */
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto; /* Centramos el modal verticalmente */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px; /* Ancho máximo del modal */
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Clase activa para mostrar el modal */
+.modal-container.active {
+  display: block;
+}
