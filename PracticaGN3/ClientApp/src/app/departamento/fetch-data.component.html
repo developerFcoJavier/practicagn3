@@ -7,12 +7,17 @@
     <tr>
       <th>Clave de departamento</th>
       <th>Descripción</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let forecast of forecasts">
       <td>{{ forecast.claveDepartamento }}</td>
       <td>{{ forecast.descripcion }}</td>
+      <td>
+        <button type="button" class="btn btn-success bt-sm"  (click)="openModal(forecast)">Actualizar</button><br/>
+        <button type="button" class="btn btn-danger bt-sm" (click)="delete(forecast.claveDepartamento)">Borrar</button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -22,7 +27,7 @@
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
     <div class="register-form">
-      <h4>Insertar elemento</h4>
+      <h4>{{titleModal}} elemento</h4>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label>Clave de departamento</label>

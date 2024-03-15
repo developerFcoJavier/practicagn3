@@ -10,6 +10,7 @@
       <th>Fecha Ingreso</th>
       <th>Fecha de Nacimiento</th>
       <th>Departamento</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -19,6 +20,10 @@
       <td>{{ forecast.fechaNacimiento }}</td>
       <td>{{ forecast.fechaNacimiento }}</td>
       <td>{{ forecast.departamentoID }}</td>
+      <td>
+        <button type="button" class="btn btn-success bt-sm" (click)="openModal(forecast)">Actualizar</button><br />
+        <button type="button" class="btn btn-danger bt-sm" (click)="delete(forecast.claveEmpleado)">Borrar</button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -28,7 +33,7 @@
   <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
     <div class="register-form">
-      <h4>Insertar elemento</h4>
+      <h4>{{titleModal}} elemento</h4>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label>Clave de Empleado</label>

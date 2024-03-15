@@ -14,6 +14,8 @@ export class FetchDataComponent implements OnInit {
   submitted = false;
   campo: string = '';
   form: FormGroup;
+  titleModal: string = 'Insertar';
+  update: boolean = false;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private formBuilder: FormBuilder) { }
 
@@ -39,16 +41,40 @@ export class FetchDataComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.http.post<any>(this.baseUrl + 'api/departamento', this.form.value).subscribe(result => {
 
-      this.submitted = false;
-      this.form.reset();
-      if (confirm(result.mensaje)) {
-        window.location.reload();
-      }
+    if (this.update) {
+      this.http.put<any>(this.baseUrl + 'api/departamento/' + this.form.value.claveDepartamento, this.form.value).subscribe(result => {
+
+            this.submitted = false;
+            this.form.reset();
+            if (confirm(result.mensaje)) {
+              window.location.reload();
+            }
       
-    }, error => alert(error.message));
+      }, error => alert(error.message));
+      return;
+    }
 
+      this.http.post<any>(this.baseUrl + 'api/departamento', this.form.value).subscribe(result => {
+
+        this.submitted = false;
+        this.form.reset();
+        if (confirm(result.mensaje)) {
+          window.location.reload();
+        }
+
+      }, error => alert(error.message));
+
+  }
+
+  delete(id: number): void {
+    if (confirm("seguro de borrar este elemento")) {
+      this.http.delete<any>(this.baseUrl + 'api/departamento/' + id).subscribe(result => {
+        if (confirm(result.mensaje)) {
+          window.location.reload();
+        }
+      }, error => alert(error.message));
+    }
   }
 
   onReset(): void {
@@ -57,7 +83,19 @@ export class FetchDataComponent implements OnInit {
   }
   modalOpen = false;
 
-  openModal(): void {
+  openModal(data: WeatherForecast | null = null): void {
+    if (data != null) {
+      this.update = true;
+      this.titleModal = 'Actualizar';
+      this.form.patchValue({
+        claveDepartamento: data.claveDepartamento,
+        descripcion: data.descripcion
+      });
+    } else {
+      this.update = false;
+      this.titleModal = 'Insertar';
+      this.form.reset();
+    }
     this.modalOpen = true;
   }
 

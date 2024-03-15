@@ -60,14 +60,44 @@ namespace PracticaGN3.Controllers
 
         // PUT api/<Sueldos>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Sueldos value)
         {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            SqlParameter claveDepartamentoParametro = new SqlParameter("@EmpleadoID", SqlDbType.Int);
+            claveDepartamentoParametro.Value = id;
+            parametros.Add(claveDepartamentoParametro);
+
+            SqlParameter sueldoParametro = new SqlParameter("@SueldoMensual", SqlDbType.Decimal);
+            sueldoParametro.Value = decimal.Parse(value.SueldoMensual.ToString());
+            parametros.Add(sueldoParametro);
+
+            SqlParameter formaPagoParametro = new SqlParameter("@FormaPago", SqlDbType.VarChar);
+            formaPagoParametro.Value = value.FormaPago;
+            parametros.Add(formaPagoParametro);
+
+            SqlParameter[] arregloParametros = parametros.ToArray();
+            repositorio.EjecutarNonQuery("ActualizarSueldo", arregloParametros);
+
+            var respuesta = new { mensaje = "Operación exitosa" };
+            return Ok(respuesta);
         }
 
         // DELETE api/<Sueldos>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            SqlParameter claveDepartamentoParametro = new SqlParameter("@ClaveDepartamento", SqlDbType.Int);
+            claveDepartamentoParametro.Value = id;
+            parametros.Add(claveDepartamentoParametro);
+
+            SqlParameter[] arregloParametros = parametros.ToArray();
+            repositorio.EjecutarNonQuery("EliminarSueldo", arregloParametros);
+
+            var respuesta = new { mensaje = "Operación exitosa" };
+            return Ok(respuesta);
         }
     }
 }

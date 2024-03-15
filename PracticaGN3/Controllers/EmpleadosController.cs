@@ -68,14 +68,52 @@ namespace PracticaGN3.Controllers
 
         // PUT api/<EmpleadosController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Empleados value)
         {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            SqlParameter claveDepartamentoParametro = new SqlParameter("@ClaveEmpleado", SqlDbType.Int);
+            claveDepartamentoParametro.Value = id;
+            parametros.Add(claveDepartamentoParametro);
+
+            SqlParameter nombreParametro = new SqlParameter("@Nombre", SqlDbType.VarChar);
+            nombreParametro.Value = value.Nombre;
+            parametros.Add(nombreParametro);
+
+            SqlParameter fechaIngresoParametro = new SqlParameter("@FechaIngreso", SqlDbType.DateTime);
+            fechaIngresoParametro.Value = value.FechaIngreso;
+            parametros.Add(fechaIngresoParametro);
+
+            SqlParameter fechaNacimientoParametro = new SqlParameter("@FechaNacimiento", SqlDbType.DateTime);
+            fechaNacimientoParametro.Value = value.FechaNacimiento;
+            parametros.Add(fechaNacimientoParametro);
+
+            SqlParameter departamentoID = new SqlParameter("@DepartamentoID", SqlDbType.Int);
+            departamentoID.Value = value.DepartamentoID;
+            parametros.Add(departamentoID);
+
+            SqlParameter[] arregloParametros = parametros.ToArray();
+            repositorio.EjecutarNonQuery("ActualizarEmpleado", arregloParametros);
+
+            var respuesta = new { mensaje = "Operación exitosa" };
+            return Ok(respuesta);
         }
 
         // DELETE api/<EmpleadosController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            SqlParameter claveDepartamentoParametro = new SqlParameter("@ClaveEmpleado", SqlDbType.Int);
+            claveDepartamentoParametro.Value = id;
+            parametros.Add(claveDepartamentoParametro);
+
+            SqlParameter[] arregloParametros = parametros.ToArray();
+            repositorio.EjecutarNonQuery("EliminarEmpleado", arregloParametros);
+
+            var respuesta = new { mensaje = "Operación exitosa" };
+            return Ok(respuesta);
         }
     }
 }

@@ -14,7 +14,8 @@ export class SueldosComponent implements OnInit {
   submitted = false;
   campo: string = '';
   form: FormGroup;
-
+  update: boolean = false;
+  titleModal: string = 'Insertar';
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
@@ -40,6 +41,19 @@ export class SueldosComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+    if (this.update) {
+      this.http.put<any>(this.baseUrl + 'api/sueldos/' + this.form.value.empleadoID, this.form.value).subscribe(result => {
+
+        this.submitted = false;
+        this.form.reset();
+        if (confirm(result.mensaje)) {
+          window.location.reload();
+        }
+
+      }, error => alert(error.message));
+      return;
+    }
+
     this.http.post<any>(this.baseUrl + 'api/sueldos', this.form.value).subscribe(result => {
 
       this.submitted = false;
@@ -52,13 +66,37 @@ export class SueldosComponent implements OnInit {
 
   }
 
+  delete(id: number): void {
+    if (confirm("seguro de borrar este elemento")) {
+      this.http.delete<any>(this.baseUrl + 'api/sueldos/' + id).subscribe(result => {
+        if (confirm(result.mensaje)) {
+          window.location.reload();
+        }
+      }, error => alert(error.message));
+    }
+  }
+
   onReset(): void {
     this.submitted = false;
     this.form.reset();
   }
   modalOpen = false;
 
-  openModal(): void {
+  openModal(data: WeatherForecast | null = null): void {
+    if (data != null) {
+      this.update = true;
+      this.titleModal = 'Actualizar';
+      this.form.patchValue({
+        empleadoID :data.empleadoID,
+        sueldoMensual: data.sueldoMensual,
+        formaPago: data.formaPago
+
+      });
+    } else {
+      this.update = false;
+      this.titleModal = 'Insertar';
+      this.form.reset();
+    }
     this.modalOpen = true;
   }
 

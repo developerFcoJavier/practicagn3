@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using PracticaGN3.Models;
 using PracticaGN3.Services;
 using System.Data;
@@ -59,14 +60,41 @@ namespace PracticaGN3.Controllers
 
         // PUT api/<DepartamentoController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Departamentos value)
         {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            SqlParameter claveDepartamentoParametro = new SqlParameter("@ClaveDepartamento", SqlDbType.Int);
+            claveDepartamentoParametro.Value = id;
+            parametros.Add(claveDepartamentoParametro);
+
+            SqlParameter descripcionParametro = new SqlParameter("@Descripcion", SqlDbType.VarChar);
+            descripcionParametro.Value = value.Descripcion;
+
+            parametros.Add(descripcionParametro);
+
+            SqlParameter[] arregloParametros = parametros.ToArray();
+            repositorio.EjecutarNonQuery("ActualizarDepartamento", arregloParametros);
+
+            var respuesta = new { mensaje = "Operación exitosa" };
+            return Ok(respuesta);
         }
 
         // DELETE api/<DepartamentoController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+
+            SqlParameter claveDepartamentoParametro = new SqlParameter("@ClaveDepartamento", SqlDbType.Int);
+            claveDepartamentoParametro.Value = id;
+            parametros.Add(claveDepartamentoParametro);
+
+            SqlParameter[] arregloParametros = parametros.ToArray();
+            repositorio.EjecutarNonQuery("EliminarDepartamento", arregloParametros);
+
+            var respuesta = new { mensaje = "Operación exitosa" };
+            return Ok(respuesta);
         }
     }
 }
